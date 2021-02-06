@@ -1,0 +1,45 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: Use Node.js 15
+      uses: actions/setup-node@v1
+      with:
+        node-version: '15.x'
+    
+    - name: Cache node modules
+      id: cache-node-modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: node_modules
+        key: npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          npm-${{ hashFiles('**/package-lock.json') }}
+          npm-
+
+    - name: Install dependencies
+      if: steps.cache_node_modules.outputs.cache-hit != 'true'
+      run: npm install
+    
+    - name: Build & export
+      run: | 
+        npm run build
+        npm run export
