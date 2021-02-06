@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Use Node.js 15
         uses: actions/setup-node@v1
