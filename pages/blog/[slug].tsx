@@ -32,7 +32,9 @@ const Post: React.FC<Props> = ({
         <title>{data.title}</title>
         <meta name="description" content={data.description}></meta>
       </Head>
-      <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+      <main>
+        <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+      </main>
     </>
   );
 };
