@@ -51,10 +51,14 @@ jobs:
           name: out
           path: out
 
-  lhci:
+  lighthouse-ci:
     runs-on: ubuntu-20.04
     needs: [build]
     steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
       - name: Download static files
         uses: actions/download-artifact@v1
         with:
