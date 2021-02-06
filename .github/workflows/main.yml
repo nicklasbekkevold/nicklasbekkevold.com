@@ -45,10 +45,23 @@ jobs:
           npm run build
           npm run export
 
+      - name: Upload static files
+        uses: actions/upload-artifact@v1
+        with:
+          name: out
+          path: out
+
   lhci:
     runs-on: ubuntu-20.04
     needs: [build]
     steps:
+      - name: Download static files
+        uses: actions/download-artifact@v1
+        with:
+          name: out
+
+      - run: ls
+
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.7.x
