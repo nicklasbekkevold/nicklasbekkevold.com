@@ -1,13 +1,40 @@
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
-import { InferGetStaticPropsType } from 'next';
 import fs from 'fs';
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from 'next';
 import path from 'path';
 import { ParsedUrlQuery } from 'querystring';
+import matter from 'gray-matter';
+import Head from 'next/head';
+import marked from 'marked';
+
+type Props = {
+  htmlString: string;
+  data: {
+    [key: string]: string;
+  };
+};
+
+interface Params extends ParsedUrlQuery {
+  slug: string;
+}
 
 const Post: React.FC<Props> = ({
-  contents,
+  htmlString,
+  data,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  return <pre>{contents}</pre>;
+  return (
+    <>
+      <Head>
+        <title>{data.title}</title>
+        <meta name="description" content={data.description}></meta>
+      </Head>
+      <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+    </>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -23,25 +50,25 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-type Props = {
-  contents: string;
-};
-
-interface Params extends ParsedUrlQuery {
-  slug: string;
-}
-
 export const getStaticProps: GetStaticProps<Props, Params> = async (
   context: GetStaticPropsContext
 ) => {
-  let contents = '';
+  let markdownWithMetadata = '';
+
   if (context.params) {
     const { slug } = context.params;
-    contents = fs.readFileSync(path.join('posts', slug + '.md')).toString();
+    markdownWithMetadata = fs
+      .readFileSync(path.join('posts', slug + '.md'))
+      .toString();
   }
+
+  const parsedMarkdown = matter(markdownWithMetadata);
+  const htmlString = marked(parsedMarkdown.content);
+
   return {
     props: {
-      contents,
+      htmlString,
+      data: parsedMarkdown.data,
     },
   };
 };
