@@ -32,9 +32,14 @@ const Post: React.FC<Props> = ({
         <title>{data.title}</title>
         <meta name="description" content={data.description}></meta>
       </Head>
-      <main>
+      <article itemScope itemType="https://schema.org/Article">
+        <meta
+          itemProp="datePublished"
+          content="2021-03-09 19:51:10 -0700 -0700"
+        />
+        <meta itemProp="author" content="Nicklas Bekkevold" />
         <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
-      </main>
+      </article>
     </>
   );
 };
