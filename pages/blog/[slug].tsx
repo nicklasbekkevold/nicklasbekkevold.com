@@ -1,15 +1,16 @@
 import fs from 'fs';
+import path from 'path';
+import { ParsedUrlQuery } from 'querystring';
+
+import matter from 'gray-matter';
+import marked from 'marked';
 import {
   GetStaticPaths,
   GetStaticProps,
   GetStaticPropsContext,
   InferGetStaticPropsType,
 } from 'next';
-import path from 'path';
-import { ParsedUrlQuery } from 'querystring';
-import matter from 'gray-matter';
 import Head from 'next/head';
-import marked from 'marked';
 import { useRouter } from 'next/router';
 import { BlogPosting, WithContext } from 'schema-dts';
 
