@@ -1,4 +1,4 @@
-@import './settings';
+@use '../abstracts/' as *;
 
 a {
   color: inherit;

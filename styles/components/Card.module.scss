@@ -1,4 +1,4 @@
-@import '../base/settings';
+@use '../abstracts' as *;
 
 .cardContainer {
   position: relative;
