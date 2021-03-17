@@ -18,10 +18,10 @@ code {
 main {
   padding: 5rem 0;
   height: 100vh;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: $dark-blue;
+  overflow: auto;
+  background: linear-gradient(45deg, $dark-blue, lighten($dark-blue, 10%));
 }

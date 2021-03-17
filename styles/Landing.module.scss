@@ -1,0 +1,51 @@
+@use 'abstracts' as *;
+
+.landing {
+  section {
+    background: white;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  nav {
+    width: 100%;
+    overflow: auto;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+  }
+
+  li {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #bbb;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    a {
+      padding: 14px 16px;
+      display: block;
+      border-radius: 5px;
+
+      &:hover {
+        background-color: darken(white, 10%);
+      }
+    }
+  }
+}
