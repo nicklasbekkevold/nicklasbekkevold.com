@@ -32,6 +32,9 @@ const Blog: React.FC<Props> = ({
             })}
           </div>
         </div>
+        <Link href="/">
+          <a>Return Home</a>
+        </Link>
       </div>
     </main>
   );

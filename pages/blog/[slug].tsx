@@ -11,6 +11,7 @@ import {
   InferGetStaticPropsType,
 } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BlogPosting, WithContext } from 'schema-dts';
 
@@ -58,9 +59,15 @@ const Post: React.FC<Props> = ({
         <title>{data.title}</title>
         <meta name="description" content={data.description}></meta>
       </Head>
-      <article>
-        <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
-      </article>
+      <main>
+        <article>
+          <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+        </article>
+        <Link href="/">
+          <a>Return Home</a>
+        </Link>
+      </main>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}

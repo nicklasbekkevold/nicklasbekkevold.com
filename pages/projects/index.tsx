@@ -30,6 +30,9 @@ const Blog: React.FC<Props> = ({
             </div>
           );
         })}
+        <Link href="/">
+          <a>Return Home</a>
+        </Link>
         <footer>Copyright 2021.</footer>
       </section>
     </main>
