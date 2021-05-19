@@ -2,7 +2,7 @@ import fs from 'fs';
 
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
-import styles from 'styles/components/Card.module.scss';
+import styles from 'styles/Landing.module.scss';
 
 type Props = {
   slugs: string[];
@@ -12,30 +12,26 @@ const Blog: React.FC<Props> = ({
   slugs,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <main>
-      <div className={styles.cardContainer}>
-        <div className={styles.card}>
-          <div className={styles.cardFront}>
-            <h1>Concratulations!</h1>
-            <h2>You have just found my secret blog.</h2>
-          </div>
-          <div className={styles.cardBack}>
-            <h3>Blog posts so far:</h3>
-            {slugs.map((slug) => {
-              return (
-                <div key={slug}>
-                  <Link href={'/blog/' + slug}>
-                    <a>{slug}</a>
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    <main className={styles.landing}>
+      <section>
+        <header>
+          <h1>Projects</h1>
+          <p>Congratualtions! You just found my secret blog.</p>
+        </header>
+        {slugs.map((slug) => {
+          return (
+            <div key={slug}>
+              <Link href={'/blog/' + slug}>
+                <a>{slug}</a>
+              </Link>
+            </div>
+          );
+        })}
         <Link href="/">
           <a>Return Home</a>
         </Link>
-      </div>
+        <footer>Copyright 2021.</footer>
+      </section>
     </main>
   );
 };
@@ -45,7 +41,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   return {
     props: {
-      slugs: files.map((filename) => filename.replace('.md', '')),
+      slugs: files.map((filename) => filename.replace('.mdx', '')),
     },
   };
 };

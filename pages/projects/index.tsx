@@ -8,7 +8,7 @@ type Props = {
   slugs: string[];
 };
 
-const Blog: React.FC<Props> = ({
+const Projects: React.FC<Props> = ({
   slugs,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -16,10 +16,7 @@ const Blog: React.FC<Props> = ({
       <section>
         <header>
           <h1>Projects</h1>
-          <p>
-            M.Sc. Computer Science at NTNU with specialization in Artificial
-            Intelligence.
-          </p>
+          <p>List of projects that I have done in the past.</p>
         </header>
         {slugs.map((slug) => {
           return (
@@ -44,9 +41,9 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   return {
     props: {
-      slugs: files.map((filename) => filename.replace('.md', '')),
+      slugs: files.map((filename) => filename.replace('.mdx', '')),
     },
   };
 };
 
-export default Blog;
+export default Projects;

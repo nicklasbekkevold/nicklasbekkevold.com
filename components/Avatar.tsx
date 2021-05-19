@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const Avatar: React.FC = () => (
+export const Avatar: React.FC = () => (
   <Image
     src="/images/profile_capra.jpg"
     alt="Nicklas Bekkevold"
@@ -8,5 +8,3 @@ const Avatar: React.FC = () => (
     height="64"
   />
 );
-
-export default Avatar;
