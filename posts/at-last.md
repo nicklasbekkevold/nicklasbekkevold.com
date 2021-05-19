@@ -1,6 +1,9 @@
 ---
 title: At last
 description: 'How my personal website finally came into existence'
+author: Nicklas Bekkevold
+datePublished: '2021-03-11 20:05:00'
+dateModified: '2021-03-11 20:05:00'
 ---
 
 # At last

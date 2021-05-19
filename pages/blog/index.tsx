@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
 import styles from 'styles/components/Card.module.scss';
@@ -31,6 +32,9 @@ const Blog: React.FC<Props> = ({
             })}
           </div>
         </div>
+        <Link href="/">
+          <a>Return Home</a>
+        </Link>
       </div>
     </main>
   );

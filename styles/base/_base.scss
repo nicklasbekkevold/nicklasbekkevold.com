@@ -1,37 +1,4 @@
-@import './settings';
-
-html {
-  font-size: 62.5%; // makes 1rem = 10px
-}
-
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-h1 {
-  font-size: $l-size;
-}
-
-h2 {
-  font-size: $m-size;
-  color: $dark-brown;
-}
-
-h3 {
-  font-size: $m-size;
-  color: $mustard-orange;
-}
-
-p {
-  font-size: $s-size;
-}
+@use '../abstracts/' as *;
 
 a {
   color: inherit;
@@ -51,10 +18,10 @@ code {
 main {
   padding: 5rem 0;
   height: 100vh;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: $dark-blue;
+  overflow: auto;
+  background: linear-gradient(45deg, $dark-blue, lighten($dark-blue, 10%));
 }
