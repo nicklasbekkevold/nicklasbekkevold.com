@@ -7,11 +7,7 @@ export const Navbar: React.FC = () => (
         <h1>Nicklas Bekkevold</h1>
       </a>
     </Link>
-    <Link href="/blog">
-      <a>Blog</a>
-    </Link>
-    <Link href="/projects">
-      <a>Projects</a>
-    </Link>
+    <Link href="/projects">Projects</Link>
+    <Link href="/blog">Blog</Link>
   </nav>
 );
