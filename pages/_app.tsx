@@ -7,7 +7,7 @@ import 'styles/styles.scss';
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
     <Layout>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Layout>
   );
 };

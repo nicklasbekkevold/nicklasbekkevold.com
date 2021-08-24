@@ -60,14 +60,12 @@ const Post: React.FC<Props> = ({
         <title>{data.title}</title>
         <meta name="description" content={data.description}></meta>
       </Head>
-      <main>
-        <article>
-          <MDXRemote {...mdxSource} />
-        </article>
-        <Link href="/">
-          <a>Return Home</a>
-        </Link>
-      </main>
+      <article>
+        <MDXRemote {...mdxSource} />
+      </article>
+      <Link href="/">
+        <a>Return Home</a>
+      </Link>
 
       <script
         type="application/ld+json"

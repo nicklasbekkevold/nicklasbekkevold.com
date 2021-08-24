@@ -12,27 +12,24 @@ const Projects: React.FC<Props> = ({
   slugs,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <main className={styles.landing}>
-      <section>
-        <header>
-          <h1>Projects</h1>
-          <p>List of projects that I have done in the past.</p>
-        </header>
-        {slugs.map((slug) => {
-          return (
-            <div key={slug}>
-              <Link href={'/projects/' + slug}>
-                <a>{slug}</a>
-              </Link>
-            </div>
-          );
-        })}
-        <Link href="/">
-          <a>Return Home</a>
-        </Link>
-        <footer>Copyright 2021.</footer>
-      </section>
-    </main>
+    <section className={styles.landing}>
+      <header>
+        <h1>Projects</h1>
+        <p>List of projects that I have done in the past.</p>
+      </header>
+      {slugs.map((slug) => {
+        return (
+          <div key={slug}>
+            <Link href={'/projects/' + slug}>
+              <a>{slug}</a>
+            </Link>
+          </div>
+        );
+      })}
+      <Link href="/">
+        <a>Return Home</a>
+      </Link>
+    </section>
   );
 };
 

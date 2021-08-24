@@ -39,19 +39,16 @@ export default function Home(): JSX.Element {
           content="/images/profile_capra.jpg"
         />
       </Head>
-      <main className={styles.landing}>
-        <section>
-          <header>
-            <h1>Nicklas Bekkevold</h1>
-            <p>
-              M.Sc. Computer Science at NTNU with specialization in Artificial
-              Intelligence.
-            </p>
-          </header>
-          <p>A text about me</p>
-          <footer>Copyright 2021.</footer>
-        </section>
-      </main>
+      <section className={styles.landing}>
+        <header>
+          <h1>Nicklas Bekkevold</h1>
+          <p>
+            M.Sc. Computer Science at NTNU with specialization in Artificial
+            Intelligence.
+          </p>
+        </header>
+        <p>A text about me</p>
+      </section>
     </>
   );
 }

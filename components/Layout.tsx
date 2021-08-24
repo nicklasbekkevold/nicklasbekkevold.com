@@ -1,3 +1,4 @@
+import { Footer } from './Footer';
 import { Navbar } from './Navbar';
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 export const Layout: React.FC<Props> = ({ children }: Props) => (
   <>
     <Navbar />
-    {children}
+    <main>{children}</main>
+    <Footer />
   </>
 );
