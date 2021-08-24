@@ -7,6 +7,8 @@ import Document, {
   NextScript,
 } from 'next/document';
 
+import { Navbar } from '../components/Navbar';
+
 class CustomDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext
@@ -20,6 +22,7 @@ class CustomDocument extends Document {
       <Html lang="en">
         <Head />
         <body>
+          <Navbar />
           <Main />
           <NextScript />
         </body>

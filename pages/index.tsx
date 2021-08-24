@@ -48,16 +48,6 @@ export default function Home(): JSX.Element {
               Intelligence.
             </p>
           </header>
-          <nav>
-            <ul>
-              <li>
-                <a href="/projects">Projects</a>
-              </li>
-              <li>
-                <a href="/blog">Blog</a>
-              </li>
-            </ul>
-          </nav>
           <p>A text about me</p>
           <footer>Copyright 2021.</footer>
         </section>
