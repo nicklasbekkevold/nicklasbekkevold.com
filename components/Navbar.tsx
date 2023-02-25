@@ -1,12 +1,14 @@
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import styles from 'styles/components/Navbar.module.scss';
 
 export const Navbar: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
-  console.log(resolvedTheme);
+  const toggleTheme: MouseEventHandler<HTMLButtonElement> = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -20,11 +22,7 @@ export const Navbar: React.FC = () => {
       </Link>
       <Link href="/projects">Projects</Link>
       <Link href="/blog">Blog</Link>
-      <button
-        aria-label="Toggle Dark Mode"
-        type="button"
-        onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      >
+      <button aria-label="Toggle Dark Mode" type="button" onClick={toggleTheme}>
         {resolvedTheme === 'dark' ? 'L' : 'D'}
       </button>
     </nav>
