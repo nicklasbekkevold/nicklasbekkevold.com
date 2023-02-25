@@ -19,6 +19,7 @@
     "sass": "^1.32.13"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^13.2.1",
     "@types/marked": "^1.2.2",
     "@types/node": "^14.17.0",
     "@types/react": "^17.0.6",
