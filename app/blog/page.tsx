@@ -35,7 +35,7 @@ export default async function Blog() {
                 <p>tags:</p>
                 <ul>
                   {post.tags.map((tag) => (
-                    <li>{tag}</li>
+                    <li key={tag}>{tag}</li>
                   ))}
                 </ul>
               </div>
