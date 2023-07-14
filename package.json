@@ -10,9 +10,13 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@notionhq/client": "^2.2.7",
     "next": "13.4.9",
+    "notion-to-md": "^3.1.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-markdown": "^8.0.7",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.4.2",
@@ -21,6 +25,7 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "encoding": "^0.1.13",
     "eslint": "^8.44.0",
     "eslint-config-next": "^13.4.9",
     "eslint-config-prettier": "^8.8.0",

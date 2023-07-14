@@ -27,7 +27,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${inter.variable}`}>{children}</body>
+      <body className={`${syne.variable} ${inter.variable}`}>
+        <header className="wrapper">
+          <h1>nicklasbekkevold.com</h1>
+        </header>
+        {children}
+      </body>
     </html>
   );
 }
