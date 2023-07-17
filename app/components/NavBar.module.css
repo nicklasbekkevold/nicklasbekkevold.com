@@ -1,0 +1,14 @@
+.navbar {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.navbar > a {
+  margin-right: 1em;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.navbar .active {
+  text-decoration: underline;
+}
