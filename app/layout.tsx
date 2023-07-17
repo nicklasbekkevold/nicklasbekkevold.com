@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Syne, Inter } from "next/font/google";
+import NavBar from "./components/NavBar";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className={`${syne.variable} ${inter.variable}`}>
         <header className="wrapper">
           <h1>nicklasbekkevold.com</h1>
+          <NavBar />
         </header>
         {children}
         <footer className="wrapper flow">&copy; 2023 Nicklas Bekkevold</footer>
