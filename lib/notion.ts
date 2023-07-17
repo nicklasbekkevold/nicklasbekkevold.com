@@ -111,7 +111,7 @@ export async function fetchBlogPostMetadata(): Promise<
     const response = await notion.databases.query({
       database_id: process.env.NOTION_BLOG_POST_ID as string,
       filter: {
-        or: [...getFilters(environment)],
+        or: getFilters(environment),
       },
       sorts: [
         {
@@ -150,13 +150,15 @@ export async function fetchBlogPost(
     const response = await notion.databases.query({
       database_id: process.env.NOTION_BLOG_POST_ID as string,
       filter: {
-        or: [...getFilters(environment)],
         and: [
           {
             property: "slug",
             rich_text: {
               equals: slug,
             },
+          },
+          {
+            or: getFilters(environment),
           },
         ],
       },
