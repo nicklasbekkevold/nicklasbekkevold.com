@@ -4,7 +4,6 @@ export default function Home() {
   return (
     <main>
       <article className="wrapper flow">
-        <h1>nicklasbekkevold.com</h1>
         <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2>
         <p>
           <strong>Donec</strong> malesuada tellus sed scelerisque sodales.
@@ -20,15 +19,6 @@ export default function Home() {
           dolor placerat vitae. Orci varius natoque penatibus et magnis dis
           parturient montes, nascetur ridiculus mus.
         </p>
-        <a href="https://nicklasbekkevold.com">nicklasbekkevold.com</a>
-
-        <Image
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
 
         <h2>Duis eleifend efficitur quam ut egestas</h2>
         <p>
