@@ -32,6 +32,7 @@ export default function RootLayout({
           <h1>nicklasbekkevold.com</h1>
         </header>
         {children}
+        <footer className="wrapper flow">&copy; 2023 Nicklas Bekkevold</footer>
       </body>
     </html>
   );
