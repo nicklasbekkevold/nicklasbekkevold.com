@@ -7,6 +7,7 @@ import {
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { z } from "zod";
 import { NotionToMarkdown } from "notion-to-md";
+import { environment, Environment } from "./environment";
 
 const blogPostMetadataResponseSchema = z.object({
   id: z.string().uuid(),
@@ -83,6 +84,26 @@ function parseBlogPostMetadata(
   return undefined;
 }
 
+function getFilters(environment: Environment) {
+  const filters = [
+    {
+      property: "status",
+      status: {
+        equals: "Published",
+      },
+    },
+  ];
+  if (environment !== "production") {
+    filters.push({
+      property: "status",
+      status: {
+        equals: "Draft",
+      },
+    });
+  }
+  return filters;
+}
+
 export async function fetchBlogPostMetadata(): Promise<
   BlogPostMetadata[] | undefined
 > {
@@ -90,10 +111,7 @@ export async function fetchBlogPostMetadata(): Promise<
     const response = await notion.databases.query({
       database_id: process.env.NOTION_BLOG_POST_ID as string,
       filter: {
-        property: "published",
-        checkbox: {
-          equals: true,
-        },
+        or: [...getFilters(environment)],
       },
       sorts: [
         {
@@ -132,13 +150,8 @@ export async function fetchBlogPost(
     const response = await notion.databases.query({
       database_id: process.env.NOTION_BLOG_POST_ID as string,
       filter: {
+        or: [...getFilters(environment)],
         and: [
-          {
-            property: "published",
-            checkbox: {
-              equals: true,
-            },
-          },
           {
             property: "slug",
             rich_text: {
