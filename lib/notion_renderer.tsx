@@ -109,8 +109,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <p key={block.id}>
           {block.paragraph.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </p>
       );
@@ -119,8 +119,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <h3 key={block.id}>
           {block.heading_1.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </h3>
       );
@@ -129,8 +129,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <h4 key={block.id}>
           {block.heading_2.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </h4>
       );
@@ -139,8 +139,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <h5 key={block.id}>
           {block.heading_3.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </h5>
       );
@@ -149,8 +149,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <blockquote key={block.id}>
           {block.callout.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </blockquote>
       );
@@ -159,8 +159,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <li key={block.id}>
           {block.bulleted_list_item.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </li>
       );
@@ -169,8 +169,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <li key={block.id}>
           {block.numbered_list_item.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </li>
       );
@@ -179,8 +179,8 @@ export function renderNotionBlock(block: BlockObjectResponse) {
         <code key={block.id}>
           {block.code.rich_text
             .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text) => (
-              <RichText richText={rich_text} />
+            .map((rich_text, i) => (
+              <RichText key={`${block.id}-${i}`} richText={rich_text} />
             ))}
         </code>
       );
