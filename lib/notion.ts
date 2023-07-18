@@ -11,8 +11,8 @@ import {
   BlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { z } from "zod";
-import { NotionToMarkdown } from "notion-to-md";
 import { environment, Environment } from "./environment";
+import { renderNotionBlock } from "./notion_renderer";
 
 const blogPostMetadataResponseSchema = z.object({
   id: z.string().uuid(),
@@ -51,14 +51,12 @@ type BlogPostMetadata = {
 
 type BlogPost = {
   metadata: BlogPostMetadata;
-  markdown: string;
+  html: JSX.Element[];
 };
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
-
-const n2m = new NotionToMarkdown({ notionClient: notion });
 
 function parseBlogPostMetadata(
   rawBlogPostMetadataResponse: PageObjectResponse
@@ -172,17 +170,19 @@ export async function fetchBlogPost(
       },
     });
 
-    const post = response.results[0] as PageObjectResponse;
-    const metadata = parseBlogPostMetadata(post);
+    const blogPost = response.results[0] as PageObjectResponse;
+    const metadata = parseBlogPostMetadata(blogPost);
     if (!metadata) return undefined;
 
-    const markdownBlocks = await n2m.pageToMarkdown(post.id);
-    const markdownString = n2m.toMarkdownString(markdownBlocks).parent;
-    if (!markdownString) return undefined;
+    const blogPostBlocks = await fetchPageBlocks(blogPost.id);
+    if (!blogPostBlocks) return undefined;
+    const blogPostComponent = blogPostBlocks
+      .map(renderNotionBlock)
+      .filter(Boolean);
 
     return {
       metadata,
-      markdown: markdownString,
+      html: blogPostComponent,
     };
   } catch (error: unknown) {
     if (isNotionClientError(error)) {
