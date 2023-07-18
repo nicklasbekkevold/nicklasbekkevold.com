@@ -137,8 +137,11 @@ export async function fetchBlogPostMetadata(): Promise<
         case APIErrorCode.Unauthorized:
           console.error("Notion Unauthorized");
           break;
+        case APIErrorCode.ValidationError:
+          console.error("Notion ValidationError");
+          break;
         default:
-          throw new Error(error.code);
+          console.error("Unknown Notion error");
       }
     }
     return undefined;
@@ -190,8 +193,11 @@ export async function fetchBlogPost(
         case APIErrorCode.Unauthorized:
           console.error("Notion Unauthorized");
           break;
+        case APIErrorCode.ValidationError:
+          console.error("Notion ValidationError");
+          break;
         default:
-          throw new Error(error.code);
+          console.error("Unknown Notion error");
       }
     }
     return undefined;
