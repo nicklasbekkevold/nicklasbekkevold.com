@@ -6,7 +6,10 @@ import {
   ClientErrorCode,
   APIErrorCode,
 } from "@notionhq/client";
-import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import {
+  PageObjectResponse,
+  BlockObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 import { z } from "zod";
 import { NotionToMarkdown } from "notion-to-md";
 import { environment, Environment } from "./environment";
@@ -181,6 +184,36 @@ export async function fetchBlogPost(
       metadata,
       markdown: markdownString,
     };
+  } catch (error: unknown) {
+    if (isNotionClientError(error)) {
+      switch (error.code) {
+        case ClientErrorCode.RequestTimeout:
+          console.error("Notion RequestTimeout");
+          break;
+        case APIErrorCode.ObjectNotFound:
+          console.error("Notion ObjectNotFound");
+          break;
+        case APIErrorCode.Unauthorized:
+          console.error("Notion Unauthorized");
+          break;
+        case APIErrorCode.ValidationError:
+          console.error("Notion ValidationError");
+          break;
+        default:
+          console.error("Unknown Notion error");
+      }
+    }
+    return undefined;
+  }
+}
+
+export async function fetchPageBlocks(
+  pageId: string
+): Promise<BlockObjectResponse[] | undefined> {
+  try {
+    return notion.blocks.children
+      .list({ block_id: pageId })
+      .then((res) => res.results as BlockObjectResponse[]);
   } catch (error: unknown) {
     if (isNotionClientError(error)) {
       switch (error.code) {
