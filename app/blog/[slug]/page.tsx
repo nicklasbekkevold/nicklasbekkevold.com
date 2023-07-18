@@ -1,5 +1,4 @@
 import { fetchBlogPost } from "@/lib/notion";
-import ReactMarkdown from "react-markdown";
 
 export const revalidate = 60;
 
@@ -20,7 +19,7 @@ export default async function BlogPost({
             <h2>{post.metadata.headline}</h2>
             <p>{post.metadata.date.toLocaleDateString("no-NO")}</p>
             <p>{post.metadata.tags.map((tag) => `#${tag} `)}</p>
-            <ReactMarkdown>{post.markdown}</ReactMarkdown>
+            <>{post.html}</>
           </>
         )}
       </article>
