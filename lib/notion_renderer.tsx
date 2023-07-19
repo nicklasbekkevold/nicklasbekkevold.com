@@ -7,7 +7,6 @@ import Link from "next/link";
 
 const RichText = ({ richText }: { richText: RichTextItemResponse }) => {
   if (richText.type === "text") {
-    console.log(richText.text.content);
     if (richText.href !== null) {
       return (
         <Link href={richText.href} target="_blank" rel="noreferrer">
@@ -102,86 +101,70 @@ const RichText = ({ richText }: { richText: RichTextItemResponse }) => {
   return <>{richText.plain_text}</>;
 };
 
+const RichTextGroup = ({
+  richTexts,
+}: {
+  richTexts: RichTextItemResponse[];
+}) => {
+  return (
+    <>
+      {richTexts
+        .filter((richText) => richText.type === "text")
+        .map((richText) => (
+          <RichText key={richText.plain_text} richText={richText} />
+        ))}
+    </>
+  );
+};
+
 export function renderNotionBlock(block: BlockObjectResponse) {
   switch (block.type) {
     case "paragraph":
       return (
         <p key={block.id}>
-          {block.paragraph.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.paragraph.rich_text} />
         </p>
       );
     case "heading_1":
       return (
         <h3 key={block.id}>
-          {block.heading_1.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.heading_1.rich_text} />
         </h3>
       );
     case "heading_2":
       return (
         <h4 key={block.id}>
-          {block.heading_2.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.heading_2.rich_text} />
         </h4>
       );
     case "heading_3":
       return (
         <h5 key={block.id}>
-          {block.heading_3.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.heading_3.rich_text} />
         </h5>
       );
     case "callout":
       return (
         <blockquote key={block.id}>
-          {block.callout.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.callout.rich_text} />
         </blockquote>
       );
     case "bulleted_list_item":
       return (
         <li key={block.id}>
-          {block.bulleted_list_item.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.bulleted_list_item.rich_text} />
         </li>
       );
     case "numbered_list_item":
       return (
         <li key={block.id}>
-          {block.numbered_list_item.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.numbered_list_item.rich_text} />
         </li>
       );
     case "code":
       return (
         <code key={block.id}>
-          {block.code.rich_text
-            .filter((rich_text) => rich_text.type === "text")
-            .map((rich_text, i) => (
-              <RichText key={`${block.id}-${i}`} richText={rich_text} />
-            ))}
+          <RichTextGroup richTexts={block.code.rich_text} />
         </code>
       );
     case "image":
