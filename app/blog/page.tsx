@@ -2,7 +2,7 @@ import { getBlogPostMetadata } from "@/lib/blog_posts";
 import Link from "next/link";
 
 export default async function Blog() {
-  const blogPostPreviews = await getBlogPostMetadata();
+  const blogPostMetadata = await getBlogPostMetadata();
 
   return (
     <main>
@@ -23,21 +23,18 @@ export default async function Blog() {
           parturient montes, nascetur ridiculus mus.
         </p>
 
-        {!blogPostPreviews ? (
+        {!blogPostMetadata ? (
           <p>No blog posts found</p>
         ) : (
-          blogPostPreviews.map((blogPostPreview) => (
-            <Link
-              href={`/blog/${blogPostPreview.slug}`}
-              key={blogPostPreview.id}
-            >
+          blogPostMetadata.map((metadata) => (
+            <Link href={`/blog/${metadata.slug}`} key={metadata.id}>
               <div>
-                <h3>{blogPostPreview.headline}</h3>
-                <p>{blogPostPreview.description}</p>
-                <p>{blogPostPreview.date.toDateString()}</p>
+                <h3>{metadata.headline}</h3>
+                <p>{metadata.description}</p>
+                <p>{metadata.date.toDateString()}</p>
                 <p>tags:</p>
                 <ul>
-                  {blogPostPreview.tags.map((tag) => (
+                  {metadata.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
