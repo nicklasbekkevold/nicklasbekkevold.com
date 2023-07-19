@@ -49,6 +49,7 @@ body {
   font-family: var(--font-family-body);
   line-height: 1.5;
   color: var(--color-text);
+  white-space: pre-wrap;
 }
 
 h1,
