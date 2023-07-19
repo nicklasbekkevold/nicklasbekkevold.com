@@ -10,82 +10,11 @@ import {
   PageObjectResponse,
   BlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { z } from "zod";
 import { environment, Environment } from "./environment";
-import { renderNotionBlock } from "./notion_renderer";
-
-const blogPostMetadataResponseSchema = z.object({
-  id: z.string().uuid(),
-  properties: z.object({
-    tags: z.object({
-      multi_select: z.array(z.object({ name: z.string() })).nonempty(),
-    }),
-    slug: z.object({
-      rich_text: z.array(z.object({ plain_text: z.string() })).nonempty(),
-    }),
-    description: z.object({
-      rich_text: z.array(z.object({ plain_text: z.string() })).nonempty(),
-    }),
-    author: z.object({
-      rich_text: z.array(z.object({ plain_text: z.string() })).nonempty(),
-    }),
-    date: z.object({
-      date: z.object({
-        start: z.string().transform((startDate) => new Date(startDate)),
-      }),
-    }),
-    headline: z.object({
-      title: z.array(z.object({ plain_text: z.string() })).nonempty(),
-    }),
-  }),
-});
-
-type BlogPostMetadata = {
-  id: string;
-  tags: string[];
-  slug: string;
-  description: string;
-  date: Date;
-  headline: string;
-};
-
-type BlogPost = {
-  metadata: BlogPostMetadata;
-  html: JSX.Element[];
-};
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
-
-function parseBlogPostMetadata(
-  rawBlogPostMetadataResponse: PageObjectResponse
-): BlogPostMetadata | undefined {
-  console.log(rawBlogPostMetadataResponse);
-  try {
-    const blogPostMetadataResponse = blogPostMetadataResponseSchema.parse(
-      rawBlogPostMetadataResponse
-    );
-    if (!blogPostMetadataResponseSchema) return undefined;
-    return {
-      id: blogPostMetadataResponse.id,
-      tags: blogPostMetadataResponse.properties.tags.multi_select.map(
-        (tag) => tag.name
-      ),
-      slug: blogPostMetadataResponse.properties.slug.rich_text[0].plain_text,
-      description:
-        blogPostMetadataResponse.properties.description.rich_text[0].plain_text,
-      date: blogPostMetadataResponse.properties.date.date.start,
-      headline:
-        blogPostMetadataResponse.properties.headline.title[0].plain_text,
-    };
-  } catch (error: unknown) {
-    if (error instanceof z.ZodError) {
-      console.error(error.issues);
-    }
-  }
-  return undefined;
-}
 
 function getFilters(environment: Environment) {
   const filters = [
@@ -108,24 +37,23 @@ function getFilters(environment: Environment) {
 }
 
 export async function fetchBlogPostMetadata(): Promise<
-  BlogPostMetadata[] | undefined
+  PageObjectResponse[] | undefined
 > {
   try {
-    const response = await notion.databases.query({
-      database_id: process.env.NOTION_BLOG_POST_ID as string,
-      filter: {
-        or: getFilters(environment),
-      },
-      sorts: [
-        {
-          property: "date",
-          direction: "descending",
+    return await notion.databases
+      .query({
+        database_id: process.env.NOTION_BLOG_POST_ID as string,
+        filter: {
+          or: getFilters(environment),
         },
-      ],
-    });
-
-    const posts = response.results as PageObjectResponse[];
-    return posts.map(parseBlogPostMetadata).filter(Boolean);
+        sorts: [
+          {
+            property: "date",
+            direction: "descending",
+          },
+        ],
+      })
+      .then((response) => response.results as PageObjectResponse[]);
   } catch (error: unknown) {
     if (isNotionClientError(error)) {
       switch (error.code) {
@@ -150,40 +78,28 @@ export async function fetchBlogPostMetadata(): Promise<
 }
 
 export async function fetchBlogPost(
-  slug: string
-): Promise<BlogPost | undefined> {
+  slug: string | undefined
+): Promise<PageObjectResponse | undefined> {
+  if (!slug) return;
   try {
-    const response = await notion.databases.query({
-      database_id: process.env.NOTION_BLOG_POST_ID as string,
-      filter: {
-        and: [
-          {
-            property: "slug",
-            rich_text: {
-              equals: slug,
+    return await notion.databases
+      .query({
+        database_id: process.env.NOTION_BLOG_POST_ID as string,
+        filter: {
+          and: [
+            {
+              property: "slug",
+              rich_text: {
+                equals: slug,
+              },
             },
-          },
-          {
-            or: getFilters(environment),
-          },
-        ],
-      },
-    });
-
-    const blogPost = response.results[0] as PageObjectResponse;
-    const metadata = parseBlogPostMetadata(blogPost);
-    if (!metadata) return undefined;
-
-    const blogPostBlocks = await fetchPageBlocks(blogPost.id);
-    if (!blogPostBlocks) return undefined;
-    const blogPostComponent = blogPostBlocks
-      .map(renderNotionBlock)
-      .filter(Boolean);
-
-    return {
-      metadata,
-      html: blogPostComponent,
-    };
+            {
+              or: getFilters(environment),
+            },
+          ],
+        },
+      })
+      .then((response) => response.results[0] as PageObjectResponse);
   } catch (error: unknown) {
     if (isNotionClientError(error)) {
       switch (error.code) {
@@ -208,8 +124,9 @@ export async function fetchBlogPost(
 }
 
 export async function fetchPageBlocks(
-  pageId: string
+  pageId: string | undefined
 ): Promise<BlockObjectResponse[] | undefined> {
+  if (!pageId) return;
   try {
     return notion.blocks.children
       .list({ block_id: pageId })

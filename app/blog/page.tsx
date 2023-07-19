@@ -1,8 +1,12 @@
 import { fetchBlogPostMetadata } from "@/lib/notion";
+import { parseBlogPostMetadata } from "@/lib/notion_parser";
 import Link from "next/link";
 
 export default async function Blog() {
-  const blogPostMetadata = await fetchBlogPostMetadata();
+  const blogPosts = await fetchBlogPostMetadata();
+  const blogPostMetadata = blogPosts
+    ?.map(parseBlogPostMetadata)
+    .filter(Boolean);
 
   return (
     <main>
@@ -26,15 +30,15 @@ export default async function Blog() {
         {!blogPostMetadata ? (
           <p>No blog posts found</p>
         ) : (
-          blogPostMetadata.map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.id}>
+          blogPostMetadata.map((blogPost) => (
+            <Link href={`/blog/${blogPost.slug}`} key={blogPost.id}>
               <div>
-                <h3>{post.headline}</h3>
-                <p>{post.description}</p>
-                <p>{post.date.toDateString()}</p>
+                <h3>{blogPost.headline}</h3>
+                <p>{blogPost.description}</p>
+                <p>{blogPost.date.toDateString()}</p>
                 <p>tags:</p>
                 <ul>
-                  {post.tags.map((tag) => (
+                  {blogPost.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
