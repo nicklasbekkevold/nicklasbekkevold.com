@@ -1,5 +1,5 @@
 import "server-only";
-
+import { cache } from "react";
 import {
   Client,
   isNotionClientError,
@@ -56,20 +56,22 @@ export async function fetchBlogPostMetadata(
   slug?: string
 ): Promise<PageObjectResponse[] | undefined> {
   try {
-    return await notion.databases
-      .query({
-        database_id: process.env.NOTION_BLOG_POST_ID as string,
-        filter: createFilter(environment, slug),
-        sorts: [
-          {
-            property: "date",
-            direction: "descending",
-          },
-        ],
-      })
-      .then((response) => {
-        return response.results as PageObjectResponse[];
-      });
+    return cache(async (slug?: string) => {
+      return notion.databases
+        .query({
+          database_id: process.env.NOTION_BLOG_POST_ID as string,
+          filter: createFilter(environment, slug),
+          sorts: [
+            {
+              property: "date",
+              direction: "descending",
+            },
+          ],
+        })
+        .then((response) => {
+          return response.results as PageObjectResponse[];
+        });
+    })(slug);
   } catch (error: unknown) {
     console.error(error);
     if (isNotionClientError(error)) {
@@ -98,11 +100,12 @@ export async function fetchBlogPostMetadata(
 export async function fetchPageBlocks(
   pageId: string
 ): Promise<BlockObjectResponse[] | undefined> {
-  if (!pageId) return;
   try {
-    return notion.blocks.children
-      .list({ block_id: pageId })
-      .then((res) => res.results as BlockObjectResponse[]);
+    return cache(async (pageId: string) => {
+      return notion.blocks.children
+        .list({ block_id: pageId })
+        .then((res) => res.results as BlockObjectResponse[]);
+    })(pageId);
   } catch (error: unknown) {
     console.error(error);
     if (isNotionClientError(error)) {
