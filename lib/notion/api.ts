@@ -1,16 +1,17 @@
 import "server-only";
-import { cache } from "react";
+
 import {
-  Client,
-  isNotionClientError,
-  ClientErrorCode,
   APIErrorCode,
+  Client,
+  ClientErrorCode,
+  isNotionClientError,
 } from "@notionhq/client";
 import {
-  PageObjectResponse,
   BlockObjectResponse,
+  PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { environment, Environment } from "../environment";
+import { cache } from "react";
+import { Environment, environment } from "../environment";
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
