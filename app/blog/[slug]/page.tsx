@@ -1,6 +1,6 @@
 import { getBlogPost } from "@/lib/blog_posts";
 
-export const revalidate = 60;
+export const revalidate = 600;
 
 export default async function BlogPost({
   params,
