@@ -1,6 +1,4 @@
-import { fetchBlogPost, fetchPageBlocks } from "@/lib/notion";
-import { parseBlogPostMetadata } from "@/lib/notion_parser";
-import { renderNotionBlock } from "@/lib/notion_renderer";
+import { getBlogPost } from "@/lib/blog_posts";
 
 export const revalidate = 60;
 
@@ -9,24 +7,19 @@ export default async function BlogPost({
 }: {
   params: { slug: string };
 }) {
-  const blogPost = await fetchBlogPost(params.slug);
-  const blogPostMetadata = parseBlogPostMetadata(blogPost);
-  const blogPostContent = await fetchPageBlocks(blogPostMetadata?.id);
-  const blogPostElements = blogPostContent
-    ?.map(renderNotionBlock)
-    .filter(Boolean);
+  const blogPost = await getBlogPost(params.slug);
 
   return (
     <main>
       <article className="wrapper flow">
-        {!blogPostMetadata || !blogPostElements ? (
+        {!blogPost ? (
           <p>No blog post found</p>
         ) : (
           <>
-            <h2>{blogPostMetadata.headline}</h2>
-            <p>{blogPostMetadata.date.toLocaleDateString("no-NO")}</p>
-            <p>{blogPostMetadata.tags.map((tag) => `#${tag} `)}</p>
-            <>{blogPostElements}</>
+            <h2>{blogPost.metadata.headline}</h2>
+            <p>{blogPost.metadata.date.toLocaleDateString("no-NO")}</p>
+            <p>{blogPost.metadata.tags.map((tag) => `#${tag} `)}</p>
+            <>{blogPost.content}</>
           </>
         )}
       </article>

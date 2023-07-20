@@ -20,7 +20,6 @@ export default function NavBar() {
   if (currentPath.includes("/blog/")) {
     currentPath = "/blog";
   }
-  console.log(currentPath);
 
   return (
     <nav className={styles.navbar}>

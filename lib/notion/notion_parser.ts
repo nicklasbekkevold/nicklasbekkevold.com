@@ -27,7 +27,7 @@ const blogPostMetadataResponseSchema = z.object({
   }),
 });
 
-type BlogPostMetadata = {
+export type BlogPostMetadata = {
   id: string;
   tags: string[];
   slug: string;
@@ -37,9 +37,8 @@ type BlogPostMetadata = {
 };
 
 export function parseBlogPostMetadata(
-  rawBlogPostMetadataResponse: PageObjectResponse | undefined
+  rawBlogPostMetadataResponse: PageObjectResponse
 ): BlogPostMetadata | undefined {
-  if (!rawBlogPostMetadataResponse) return;
   try {
     const blogPostMetadataResponse = blogPostMetadataResponseSchema.parse(
       rawBlogPostMetadataResponse

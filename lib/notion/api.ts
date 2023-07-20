@@ -10,42 +10,56 @@ import {
   PageObjectResponse,
   BlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { environment, Environment } from "./environment";
+import { environment, Environment } from "../environment";
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-function getFilters(environment: Environment) {
-  const filters = [
-    {
-      property: "status",
-      status: {
-        equals: "Published",
+function createFilter(environment: Environment, slug?: string) {
+  const statusFilter = {
+    or: [
+      {
+        property: "status",
+        status: {
+          equals: "Published",
+        },
       },
-    },
-  ];
+    ],
+  };
   if (environment !== "production") {
-    filters.push({
+    statusFilter.or.push({
       property: "status",
       status: {
         equals: "Draft",
       },
     });
   }
-  return filters;
+
+  if (slug) {
+    return {
+      and: [
+        {
+          property: "slug",
+          rich_text: {
+            equals: slug,
+          },
+        },
+        statusFilter,
+      ],
+    };
+  }
+  return statusFilter;
 }
 
-export async function fetchBlogPostMetadata(): Promise<
-  PageObjectResponse[] | undefined
-> {
+export async function fetchBlogPostMetadata(
+  slug?: string
+): Promise<PageObjectResponse[] | undefined> {
   try {
     return await notion.databases
       .query({
         database_id: process.env.NOTION_BLOG_POST_ID as string,
-        filter: {
-          or: getFilters(environment),
-        },
+        filter: createFilter(environment, slug),
         sorts: [
           {
             property: "date",
@@ -53,8 +67,11 @@ export async function fetchBlogPostMetadata(): Promise<
           },
         ],
       })
-      .then((response) => response.results as PageObjectResponse[]);
+      .then((response) => {
+        return response.results as PageObjectResponse[];
+      });
   } catch (error: unknown) {
+    console.error(error);
     if (isNotionClientError(error)) {
       switch (error.code) {
         case ClientErrorCode.RequestTimeout:
@@ -73,58 +90,13 @@ export async function fetchBlogPostMetadata(): Promise<
           console.error("Unknown Notion error");
       }
     }
-    return undefined;
-  }
-}
-
-export async function fetchBlogPost(
-  slug: string | undefined
-): Promise<PageObjectResponse | undefined> {
-  if (!slug) return;
-  try {
-    return await notion.databases
-      .query({
-        database_id: process.env.NOTION_BLOG_POST_ID as string,
-        filter: {
-          and: [
-            {
-              property: "slug",
-              rich_text: {
-                equals: slug,
-              },
-            },
-            {
-              or: getFilters(environment),
-            },
-          ],
-        },
-      })
-      .then((response) => response.results[0] as PageObjectResponse);
-  } catch (error: unknown) {
-    if (isNotionClientError(error)) {
-      switch (error.code) {
-        case ClientErrorCode.RequestTimeout:
-          console.error("Notion RequestTimeout");
-          break;
-        case APIErrorCode.ObjectNotFound:
-          console.error("Notion ObjectNotFound");
-          break;
-        case APIErrorCode.Unauthorized:
-          console.error("Notion Unauthorized");
-          break;
-        case APIErrorCode.ValidationError:
-          console.error("Notion ValidationError");
-          break;
-        default:
-          console.error("Unknown Notion error");
-      }
-    }
+    console.error("Unknown error occurred while fetching blog post metadata.");
     return undefined;
   }
 }
 
 export async function fetchPageBlocks(
-  pageId: string | undefined
+  pageId: string
 ): Promise<BlockObjectResponse[] | undefined> {
   if (!pageId) return;
   try {
@@ -132,6 +104,7 @@ export async function fetchPageBlocks(
       .list({ block_id: pageId })
       .then((res) => res.results as BlockObjectResponse[]);
   } catch (error: unknown) {
+    console.error(error);
     if (isNotionClientError(error)) {
       switch (error.code) {
         case ClientErrorCode.RequestTimeout:
@@ -150,6 +123,9 @@ export async function fetchPageBlocks(
           console.error("Unknown Notion error");
       }
     }
+    console.error(
+      `Unknown error occurred while fetching blog post with id ${pageId}.`
+    );
     return undefined;
   }
 }

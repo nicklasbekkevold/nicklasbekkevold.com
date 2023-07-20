@@ -1,12 +1,8 @@
-import { fetchBlogPostMetadata } from "@/lib/notion";
-import { parseBlogPostMetadata } from "@/lib/notion_parser";
+import { getBlogPostMetadata } from "@/lib/blog_posts";
 import Link from "next/link";
 
 export default async function Blog() {
-  const blogPosts = await fetchBlogPostMetadata();
-  const blogPostMetadata = blogPosts
-    ?.map(parseBlogPostMetadata)
-    .filter(Boolean);
+  const blogPostPreviews = await getBlogPostMetadata();
 
   return (
     <main>
@@ -27,18 +23,21 @@ export default async function Blog() {
           parturient montes, nascetur ridiculus mus.
         </p>
 
-        {!blogPostMetadata ? (
+        {!blogPostPreviews ? (
           <p>No blog posts found</p>
         ) : (
-          blogPostMetadata.map((blogPost) => (
-            <Link href={`/blog/${blogPost.slug}`} key={blogPost.id}>
+          blogPostPreviews.map((blogPostPreview) => (
+            <Link
+              href={`/blog/${blogPostPreview.slug}`}
+              key={blogPostPreview.id}
+            >
               <div>
-                <h3>{blogPost.headline}</h3>
-                <p>{blogPost.description}</p>
-                <p>{blogPost.date.toDateString()}</p>
+                <h3>{blogPostPreview.headline}</h3>
+                <p>{blogPostPreview.description}</p>
+                <p>{blogPostPreview.date.toDateString()}</p>
                 <p>tags:</p>
                 <ul>
-                  {blogPost.tags.map((tag) => (
+                  {blogPostPreview.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
