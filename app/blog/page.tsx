@@ -1,8 +1,8 @@
-import { fetchBlogPostMetadata } from "@/lib/notion";
+import { getBlogPostMetadata } from "@/lib/blog_posts";
 import Link from "next/link";
 
 export default async function Blog() {
-  const blogPostMetadata = await fetchBlogPostMetadata();
+  const blogPostMetadata = await getBlogPostMetadata();
 
   return (
     <main>
@@ -26,15 +26,15 @@ export default async function Blog() {
         {!blogPostMetadata ? (
           <p>No blog posts found</p>
         ) : (
-          blogPostMetadata.map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.id}>
+          blogPostMetadata.map((metadata) => (
+            <Link href={`/blog/${metadata.slug}`} key={metadata.id}>
               <div>
-                <h3>{post.headline}</h3>
-                <p>{post.description}</p>
-                <p>{post.date.toDateString()}</p>
+                <h3>{metadata.headline}</h3>
+                <p>{metadata.description}</p>
+                <p>{metadata.date.toDateString()}</p>
                 <p>tags:</p>
                 <ul>
-                  {post.tags.map((tag) => (
+                  {metadata.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
