@@ -1,5 +1,6 @@
 import { getBlogPostMetadata } from "@/lib/blog_posts";
 import Link from "next/link";
+import styles from "./Blog.module.css";
 
 export default async function Blog() {
   const blogPostMetadata = await getBlogPostMetadata();
@@ -23,25 +24,27 @@ export default async function Blog() {
           parturient montes, nascetur ridiculus mus.
         </p>
 
-        {!blogPostMetadata ? (
-          <p>No blog posts found</p>
-        ) : (
-          blogPostMetadata.map((metadata) => (
-            <Link href={`/blog/${metadata.slug}`} key={metadata.id}>
-              <div>
+        <section className={styles['blog-posts']}>
+          {!blogPostMetadata ? (
+            <p>No blog posts found</p>
+          ) : (
+            blogPostMetadata.map((metadata) => (
+              <article key={metadata.id} className={styles['blog-post']}>
+                <Link href={`/blog/${metadata.slug}`} className={styles['post-link']} />
                 <h3>{metadata.headline}</h3>
                 <p>{metadata.description}</p>
                 <p>{metadata.date.toDateString()}</p>
-                <p>tags:</p>
                 <ul>
                   {metadata.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
+                    <li key={tag}>
+                      <Link href={`/tag/${tag}`}>#{tag}</Link>
+                    </li>
                   ))}
                 </ul>
-              </div>
-            </Link>
-          ))
-        )}
+              </article>
+            ))
+          )}
+        </section>
       </article>
     </main>
   );
